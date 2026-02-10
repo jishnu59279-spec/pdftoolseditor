@@ -1,0 +1,24 @@
+import express from "express";
+import { spawn } from "child_process";
+
+const router = express.Router();
+
+router.post("/semantic-search", (req, res) => {
+  const py = spawn("python", ["ai-engine/qa/search.py", req.body.query]);
+  let out = "";
+  py.stdout.on("data", d => out += d);
+  py.on("close", () => res.json(JSON.parse(out)));
+});
+
+router.post("/qa", (req, res) => {
+  const py = spawn("python", [
+    "ai-engine/qa/run_qa.py",
+    req.body.context,
+    req.body.question
+  ]);
+  let out = "";
+  py.stdout.on("data", d => out += d);
+  py.on("close", () => res.json(JSON.parse(out)));
+});
+
+export default router;
