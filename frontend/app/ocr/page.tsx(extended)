@@ -1,0 +1,22 @@
+"use client";
+import { useState } from "react";
+
+export default function OCRPage() {
+  const [result, setResult] = useState<any>(null);
+
+  async function process(file: File) {
+    const res = await fetch("/api/ocr/extract", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ file: file.name })
+    });
+    setResult(await res.json());
+  }
+
+  return (
+    <div>
+      <input type="file" onChange={e => process(e.target.files![0])} />
+      <pre>{JSON.stringify(result, null, 2)}</pre>
+    </div>
+  );
+}

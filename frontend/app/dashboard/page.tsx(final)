@@ -1,0 +1,17 @@
+"use client";
+import { useEffect, useState } from "react";
+
+export default function Dashboard() {
+  const [files, setFiles] = useState<string[]>([]);
+
+  useEffect(() => {
+    setFiles(["file1.pdf", "file2.pdf"]);
+  }, []);
+
+  return (
+    <div>
+      <h1>My Documents</h1>
+      {files.map(f => <div key={f}>{f}</div>)}
+    </div>
+  );
+}

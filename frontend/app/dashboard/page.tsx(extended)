@@ -1,0 +1,28 @@
+"use client";
+import { useState } from "react";
+
+export default function Dashboard() {
+  const [ans, setAns] = useState<any>(null);
+
+  async function ask(q: string) {
+    const res = await fetch("/api/ai/qa", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        context: "Uploaded document text",
+        question: q
+      })
+    });
+    setAns(await res.json());
+  }
+
+  return (
+    <div>
+      <input
+        placeholder="Ask your document..."
+        onKeyDown={e => e.key === "Enter" && ask(e.currentTarget.value)}
+      />
+      <pre>{JSON.stringify(ans, null, 2)}</pre>
+    </div>
+  );
+}
